@@ -1,11 +1,7 @@
 var jsdom  = require('jsdom');
 var fs     = require('fs');
 var jquery = fs.readFileSync("./js/jquery.js").toString();
-var sourceUrl = [
-        'http://www.wretch.cc/blog/wretchbeauty/12760490',
-        'http://www.wretch.cc/blog/wretchbeauty/12760527',
-        'http://www.wretch.cc/blog/wretchbeauty/12760512'
-    ];
+var sourceUrl = process.argv[2];
 
 function fetchImg (url) {
     jsdom.env({
@@ -23,7 +19,5 @@ function fetchImg (url) {
     });
 }
 
-sourceUrl.forEach(function (el, idx) {
-    fetchImg(el);
-});
-
+// fetch url
+fetchImg(sourceUrl);
