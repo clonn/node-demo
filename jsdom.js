@@ -1,25 +1,25 @@
-var http = require('http');
-var options = {
-  host: 'tw.yahoo.com',
-  host: 'clonn.info',
-  port: 80,
-  path: '/index.html',
-  path: '/lalila.html'
-};
-
-// Get service is working
-http.get(options, function(res) {
-    console.log("Got response: " + res.statusCode);
-    var status = {
-        '200': true,
-        '302': true
+var req,
+    http = require('http'),
+    options = {
+      host: 'tw.yahoo.com',
+      port: 80,
+      path: '/index.html',
+      method: 'POST'
     };
 
-    if (status[res.statusCode]) {
-        console.log("service is working");
-    } else {
-        console.log("service is fail");
-    }
-}).on('error', function(e) {
+// Get service is working
+req = http.request(options, function(res) {
+    console.log('STATUS: ' + res.statusCode);
+    console.log('HEADERS: ' + JSON.stringify(res.headers));
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+        console.log('BODY: ' + chunk);
+    });
+});
+
+req.on('error', function(e) {
     console.log("Got error: " + e.message);
 });
+
+// notice have to add req end;
+req.end();
