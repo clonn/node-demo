@@ -1,5 +1,7 @@
 var req,
     http = require('http'),
+    jsdom = require('jsdom'),
+    htmlContent = '',
     options = {
       host: 'tw.yahoo.com',
       port: 80,
@@ -7,13 +9,17 @@ var req,
       method: 'POST'
     };
 
+console.log(htmlContent);
+
 // Get service is working
 req = http.request(options, function(res) {
-    console.log('STATUS: ' + res.statusCode);
-    console.log('HEADERS: ' + JSON.stringify(res.headers));
     res.setEncoding('utf8');
     res.on('data', function (chunk) {
-        console.log('BODY: ' + chunk);
+        htmlContent += chunk;
+    });
+    res.on('end', function (chunk) {
+        console.log(htmlContent);
+        console.log('data is end\n');
     });
 });
 
@@ -23,3 +29,4 @@ req.on('error', function(e) {
 
 // notice have to add req end;
 req.end();
+
