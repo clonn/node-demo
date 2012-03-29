@@ -1,8 +1,12 @@
+#!/usr/bin/env node
+
 var jsdom  = require('jsdom');
 var fs     = require('fs');
 var jquery = fs.readFileSync("./js/jquery.js").toString();
-var sourceUrl = process.argv[2];
+var HTTP_TYPE = /^http/;
+var sourceUrl = process.argv[2] || "";
 
+// fetch image function.
 function fetchImg (url) {
     jsdom.env({
       html: url,
@@ -19,5 +23,13 @@ function fetchImg (url) {
     });
 }
 
-// fetch url
-fetchImg(sourceUrl);
+// check parameter style.
+if (sourceUrl.match(HTTP_TYPE)) {
+    fetchImg(sourceUrl);
+} else {
+    if (process.argv[1].match(HTTP_TYPE)) {
+        fetchImg(sourceUrl);
+    } else {
+        console.log("Parameter need a url type.");
+    }
+}
