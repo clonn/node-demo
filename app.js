@@ -10,7 +10,15 @@ var express = require('express')
   , path = require('path');
 
 var TaskList = require('./routes/tasklist'),
-    taskList = new TaskList('mongodb://127.0.0.1/tasks');
+    taskList;
+
+if (process.env.NODE_ENV == 'development') {
+  console.log('[STATUS] Runs in development mode')
+  taskList = new TaskList('mongodb://127.0.0.1/tasks');
+} else {
+  console.log('[STATUS] Runs in production mode')
+  taskList = new TaskList('mongodb://user:123456@dharma.mongohq.com:10036/tasks');
+}
 
 var app = express();
 
@@ -26,6 +34,9 @@ app.configure(function(){
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
+app.configure('development', function(){
+  app.use(express.errorHandler());
+});
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
